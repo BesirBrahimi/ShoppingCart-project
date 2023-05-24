@@ -1,0 +1,36 @@
+.navbar {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar-logo {
+    font-weight: bold;
+    font-size: 24px;
+  }
+  
+  .navbar-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+  }
+  
+  .navbar-link {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .navbar-link.active {
+    background-color: #fff;
+    color: #007bff;
+  }
+  .direction-nav{
+    font-weight: 600;
+    margin-top: 10px;
+  }
