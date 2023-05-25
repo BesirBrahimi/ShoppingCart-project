@@ -20,7 +20,6 @@ interface CartContextProps {
   boughtProducts: BoughtProduct[];
   addToCart: (product: Product) => void;
   removeFromCart: (productId: number) => void;
-  addToBoughtProducts: (product: Product) => void;
   removeFromBoughtProducts: (productId: number) => void;
   clearBoughtProducts: () => void; 
 }
@@ -30,7 +29,6 @@ const CartContext = createContext<CartContextProps>({
   boughtProducts: [],
   addToCart: () => {},
   removeFromCart: () => {},
-  addToBoughtProducts: () => {},
   removeFromBoughtProducts: () => {},
   clearBoughtProducts: () => {}
 });
@@ -85,19 +83,6 @@ const CartContextProvider: React.FC<CartContextProviderProps> = ({ children }) =
     );
   };
 
-  const addToBoughtProducts = (product: Product) => {
-    setBoughtProducts((prevProducts) => {
-      const existingProduct = prevProducts.find((item) => item.id === product.id);
-  
-      if (existingProduct) {
-        return prevProducts.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        return [...prevProducts, { ...product, quantity: 1 }];
-      }
-    });
-  };
 
   const clearBoughtProducts = () => {
     setBoughtProducts([]);
@@ -131,7 +116,6 @@ const CartContextProvider: React.FC<CartContextProviderProps> = ({ children }) =
         boughtProducts,
         addToCart,
         removeFromCart,
-        addToBoughtProducts,
         removeFromBoughtProducts,
         clearBoughtProducts 
       }}
