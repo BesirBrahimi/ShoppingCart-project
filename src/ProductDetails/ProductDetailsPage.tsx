@@ -22,7 +22,7 @@ const ProductDetailsPage: React.FC = () => {
       <h2>Product Details</h2>
       <div className="single-product-details">
         <img src={product.image} alt={product.name} className="single-product-image" />
-        <div>
+        <div className='single-product-div-desc'>
           <h3 className="single-product-name">{product.name}</h3>
           <p className="single-product-description">{product.description}</p>
           <p className="single-product-price">${product.price}</p>

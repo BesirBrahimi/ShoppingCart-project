@@ -14,11 +14,11 @@ ul {
   }
   
   .product-item {
-    width: 315px;
+    width: 285px;
     border: 1px solid #ccc;
     padding: 7px 3px;
     border-radius: 5px;
-    margin: 3px 5px;
+    margin: 3px auto;
   }
   
   .product-details {
@@ -84,7 +84,7 @@ ul {
   }
   
   .product-image{
-    width: 180px;
+    width: 165px;
     height: 150px;
     object-fit: contain;
   }
