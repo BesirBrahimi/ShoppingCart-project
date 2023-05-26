@@ -45,3 +45,17 @@
     background-color: rgb(255, 0, 0);
     transition: all .7s ease;
   }
+
+  @media (max-width: 590px) {
+    .single-product-details{
+      display: flex;
+      flex-direction: column;
+    }
+    .single-product-image{
+      margin: 20px auto;
+      height: 400px;
+    }
+    .single-product-div-desc{
+      margin-top: 50px;
+    }
+  }
