@@ -12,6 +12,12 @@ interface Product {
 }
 
 const ShoppingCart: React.FC = () => {
+
+  const DollarUsd = new Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD",
+  })
+  
   const { cartItems, addToCart } = useContext(CartContext);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -65,7 +71,7 @@ const ShoppingCart: React.FC = () => {
             <div className="product-spec">
               <div className="product-details">
                 <div className="product-name">{product.name}</div>
-                <div className="product-price">${product.price}</div>
+                <div className="product-price">{DollarUsd.format(product.price)}</div>
               </div>
               {productMessages[product.id] && (
                 <p className="message">{productMessages[product.id]}</p>

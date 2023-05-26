@@ -19,6 +19,11 @@ const BoughtProducts: React.FC = () => {
     CartContext
   );
 
+  const DollarUsd = new Intl.NumberFormat('en-US', {
+    style: "currency",
+    currency: "USD",
+  })
+
   const [storedBoughtProducts, setStoredBoughtProducts] = useState<BoughtProduct[]>([]);
 
   useEffect(() => {
@@ -45,16 +50,12 @@ const BoughtProducts: React.FC = () => {
     0
   );
 
-  const showDetails = (product: BoughtProduct) => {
-    console.log('Product details:', product);
-  };
-
   return (
     <div className="container">
       <div className="header-bought">
         <h2>Bought Products</h2>
         <div className="total-clear">
-          <h3 className="total-price">Total Price: ${totalPrice}</h3>
+          <h3 className="total-price">Total Price: {DollarUsd.format(totalPrice)}</h3>
           <button className="clear-all-button" onClick={clearAllProducts}>
             Clear All
           </button>
