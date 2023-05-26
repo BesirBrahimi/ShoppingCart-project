@@ -1,19 +1,19 @@
-
 import React, { useContext, useState } from 'react';
 import { CartContext } from '../CartContext';
-import products  from '../ProductsData';
-import "./ShoppingCart.css"
+import products from '../ProductsData';
+import "./ShoppingCart.css";
 
 interface Product {
   id: number;
   name: string;
   price: number;
   image: string;
+  category: string;
 }
 
 const ShoppingCart: React.FC = () => {
   const { cartItems, addToCart } = useContext(CartContext);
-
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [productMessages, setProductMessages] = useState<{ [key: number]: string }>({});
 
@@ -32,12 +32,34 @@ const ShoppingCart: React.FC = () => {
       });
     }, 2000);
   };
+  
+   const filteredProducts = selectedCategory ?
+    products.filter((product) => product.category === selectedCategory) : products;
+    
+    const categories = [...new Set(products.map((product) => product.category))]
 
   return (
     <div className="container">
       <h2>Our Products</h2>
+      <div className="category-list">
+        <button
+          className={`category-item ${selectedCategory === null ? 'active' : ''}`}
+          onClick={() => setSelectedCategory(null)}
+        >
+          All
+        </button>
+        {categories.map((category) => (
+          <button
+            key={category}
+            className={`category-item ${selectedCategory === category ? 'active' : ''}`}
+            onClick={() => setSelectedCategory(category)}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
       <ul className="product-list">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <li key={product.id} className="product-item">
             <img src={product.image} alt={product.name} className="product-image" />
             <div className="product-spec">
@@ -60,4 +82,3 @@ const ShoppingCart: React.FC = () => {
 };
 
 export default ShoppingCart;
-
