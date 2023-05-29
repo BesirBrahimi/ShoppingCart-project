@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { CartContext } from "../CartContext";
 import products from "../ProductsData";
 import "./ShoppingCart.css";
+import useCartContext from "../useCartContext";
 
 interface Product {
   id: number;
@@ -17,7 +18,7 @@ const ShoppingCart: React.FC = () => {
     currency: "USD",
   });
 
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCartContext()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const [productMessages, setProductMessages] = useState<{
