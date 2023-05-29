@@ -63,11 +63,9 @@ const shoppingCardDB = {
 
     return boughtProducts;
   },
-  clearAllBoughtProducts: (
-    setBoughtProducts: (value: BoughtProduct[]) => void
-  ) => {
-    setBoughtProducts([]);
-    window.localStorage.removeItem("boughtProducts");
+  clearAllBoughtProducts: () => {
+    window.localStorage.setItem("boughtProducts", JSON.stringify([]));
+    return []
   },
 };
 
@@ -139,7 +137,8 @@ const CartContextProvider: React.FC<CartContextProviderProps> = ({
   };
 
   const clearBoughtProducts = () => {
-    shoppingCardDB.clearAllBoughtProducts(setBoughtProducts);
+    const newState = shoppingCardDB.clearAllBoughtProducts();
+    setBoughtProducts(newState)
   };
 
   return (
