@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { CartContext } from "../CartContext";
+import useCartContext from "../useCartContext";
 import { Link } from "react-router-dom";
 import "./BoughtProduct.css";
 
@@ -20,7 +20,7 @@ const BoughtProducts: React.FC = () => {
     addToCart,
     removeFromBoughtProducts,
     clearBoughtProducts,
-  } = useContext(CartContext);
+  } = useCartContext();
 
   const DollarUsd = new Intl.NumberFormat("en-US", {
     style: "currency",
