@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { CartContext } from '../CartContext';
-import { Link } from 'react-router-dom';
-import './BoughtProduct.css';
+import React, { useContext, useEffect, useState } from "react";
+import { CartContext } from "../CartContext";
+import { Link } from "react-router-dom";
+import "./BoughtProduct.css";
 
 interface Product {
   id: number;
@@ -15,15 +15,17 @@ interface BoughtProduct extends Product {
 }
 
 const BoughtProducts: React.FC = () => {
-  const { boughtProducts, addToCart, removeFromBoughtProducts, clearBoughtProducts } = useContext(
-    CartContext
-  );
+  const {
+    boughtProducts,
+    addToCart,
+    removeFromBoughtProducts,
+    clearBoughtProducts,
+  } = useContext(CartContext);
 
-  const DollarUsd = new Intl.NumberFormat('en-US', {
+  const DollarUsd = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-  })
-
+  });
 
   const removeBoughtProduct = (productId: number) => {
     removeFromBoughtProducts(productId);
@@ -43,7 +45,9 @@ const BoughtProducts: React.FC = () => {
       <div className="header-bought">
         <h2>Bought Products</h2>
         <div className="total-clear">
-          <h3 className="total-price">Total Price: {DollarUsd.format(totalPrice)}</h3>
+          <h3 className="total-price">
+            Total Price: {DollarUsd.format(totalPrice)}
+          </h3>
           <button className="clear-all-button" onClick={clearAllProducts}>
             Clear All
           </button>
@@ -56,7 +60,7 @@ const BoughtProducts: React.FC = () => {
             className="empty-cart"
             alt=""
           />
-          <Link to="/" >
+          <Link to="/">
             <button className="go-back-button">Go Back</button>
           </Link>
         </div>
@@ -89,10 +93,11 @@ const BoughtProducts: React.FC = () => {
                   >
                     Delete
                   </button>
-                  <Link
-                    to={`/products/${product.id}`}
-                  >
-                   <button className='show-details-button'> Show Details</button>
+                  <Link to={`/products/${product.id}`}>
+                    <button className="show-details-button">
+                      {" "}
+                      Show Details
+                    </button>
                   </Link>
                 </div>
               </li>

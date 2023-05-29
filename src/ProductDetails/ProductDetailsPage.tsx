@@ -1,7 +1,7 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import products from '../ProductsData';
-import './ProductDetailsPage.css';
+import React from "react";
+import { useParams, Link } from "react-router-dom";
+import products from "../ProductsData";
+import "./ProductDetailsPage.css";
 
 const ProductDetailsPage: React.FC = () => {
   const { id } = useParams();
@@ -21,17 +21,20 @@ const ProductDetailsPage: React.FC = () => {
     <div className="single-container-details">
       <h2>Product Details</h2>
       <div className="single-product-details">
-        <img src={product.image} alt={product.name} className="single-product-image" />
-        <div className='single-product-div-desc'>
+        <img
+          src={product.image}
+          alt={product.name}
+          className="single-product-image"
+        />
+        <div className="single-product-div-desc">
           <h3 className="single-product-name">{product.name}</h3>
           <p className="single-product-description">{product.description}</p>
           <p className="single-product-price">${product.price}</p>
           <Link to="/bought" className="back-button">
-          Go Back
+            Go Back
           </Link>
         </div>
       </div>
-      
     </div>
   );
 };

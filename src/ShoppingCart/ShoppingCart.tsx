@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
-import { CartContext } from '../CartContext';
-import products from '../ProductsData';
+import React, { useContext, useState } from "react";
+import { CartContext } from "../CartContext";
+import products from "../ProductsData";
 import "./ShoppingCart.css";
 
 interface Product {
@@ -12,16 +12,17 @@ interface Product {
 }
 
 const ShoppingCart: React.FC = () => {
-
-  const DollarUsd = new Intl.NumberFormat('en-US', {
+  const DollarUsd = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
-  })
-  
-  const { cartItems, addToCart } = useContext(CartContext);
+  });
+
+  const { addToCart } = useContext(CartContext);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const [productMessages, setProductMessages] = useState<{ [key: number]: string }>({});
+  const [productMessages, setProductMessages] = useState<{
+    [key: number]: string;
+  }>({});
 
   const handleAddToCart = (product: Product) => {
     addToCart(product);
@@ -38,18 +39,21 @@ const ShoppingCart: React.FC = () => {
       });
     }, 2000);
   };
-  
-   const filteredProducts = selectedCategory ?
-    products.filter((product) => product.category === selectedCategory) : products;
-    
-    const categories = [...new Set(products.map((product) => product.category))]
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
+
+  const categories = [...new Set(products.map((product) => product.category))];
 
   return (
     <div className="container">
       <h2>Our Products</h2>
       <div className="category-list">
         <button
-          className={`category-item ${selectedCategory === null ? 'active' : ''}`}
+          className={`category-item ${
+            selectedCategory === null ? "active" : ""
+          }`}
           onClick={() => setSelectedCategory(null)}
         >
           All
@@ -57,7 +61,9 @@ const ShoppingCart: React.FC = () => {
         {categories.map((category) => (
           <button
             key={category}
-            className={`category-item ${selectedCategory === category ? 'active' : ''}`}
+            className={`category-item ${
+              selectedCategory === category ? "active" : ""
+            }`}
             onClick={() => setSelectedCategory(category)}
           >
             {category}
@@ -67,16 +73,25 @@ const ShoppingCart: React.FC = () => {
       <ul className="product-list">
         {filteredProducts.map((product) => (
           <li key={product.id} className="product-item">
-            <img src={product.image} alt={product.name} className="product-image" />
+            <img
+              src={product.image}
+              alt={product.name}
+              className="product-image"
+            />
             <div className="product-spec">
               <div className="product-details">
                 <div className="product-name">{product.name}</div>
-                <div className="product-price">{DollarUsd.format(product.price)}</div>
+                <div className="product-price">
+                  {DollarUsd.format(product.price)}
+                </div>
               </div>
               {productMessages[product.id] && (
                 <p className="message">{productMessages[product.id]}</p>
               )}
-              <button className="product-button" onClick={() => handleAddToCart(product)}>
+              <button
+                className="product-button"
+                onClick={() => handleAddToCart(product)}
+              >
                 Add to Cart
               </button>
             </div>
