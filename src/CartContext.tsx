@@ -1,4 +1,40 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect, ReactNode } from "react";
+
+const shoppingCardDB = {
+  addProducts: (boughtProducts: BoughtProduct[], product: Product) => {
+    const existingItem = boughtProducts.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      const storedLSProducts = getBoughtProducts().map((item: BoughtProduct) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      );
+
+      window.localStorage.setItem(
+        "boughtProducts",
+        JSON.stringify(storedLSProducts)
+      );
+
+      return storedLSProducts;
+    } else {
+      const storedLSProducts = getBoughtProducts();
+
+      storedLSProducts.push({ ...product, quantity: 1 });
+
+      window.localStorage.setItem(
+        "boughtProducts",
+        JSON.stringify(storedLSProducts)
+      );
+
+      return storedLSProducts;
+    }
+  },
+  removeProducts: () => {
+    return;
+  },
+  deleteCart: () => {
+
+  }
+}
 
 interface Product {
   id: number;
@@ -21,7 +57,7 @@ interface CartContextProps {
   addToCart: (product: Product) => void;
   removeFromCart: (productId: number) => void;
   removeFromBoughtProducts: (productId: number) => void;
-  clearBoughtProducts: () => void; 
+  clearBoughtProducts: () => void;
 }
 
 const CartContext = createContext<CartContextProps>({
@@ -30,67 +66,55 @@ const CartContext = createContext<CartContextProps>({
   addToCart: () => {},
   removeFromCart: () => {},
   removeFromBoughtProducts: () => {},
-  clearBoughtProducts: () => {}
+  clearBoughtProducts: () => {},
 });
 
 interface CartContextProviderProps {
   children: ReactNode;
 }
 
-const CartContextProvider: React.FC<CartContextProviderProps> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+const getBoughtProducts = () => {
+  const storedProducts = localStorage.getItem("boughtProducts") ?? "";
+  const storedLSProducts =
+    storedProducts && Array.isArray(JSON.parse(storedProducts))
+      ? JSON.parse(storedProducts)
+      : [];
+  return storedLSProducts;
+};
+
+const CartContextProvider: React.FC<CartContextProviderProps> = ({
+  children,
+}) => {
   const [boughtProducts, setBoughtProducts] = useState<BoughtProduct[]>([]);
-  
+
+  useEffect(() => {
+    setBoughtProducts(getBoughtProducts())
+  }, [])
 
   const addToCart = (product: Product) => {
-    const existingItem = cartItems.find((item) => item.id === product.id);
-  
-    if (existingItem) {
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        )
-      );
-    } else {
-      setCartItems((prevItems) => [
-        ...prevItems,
-        { ...product, quantity: 1 }
-      ]);
-    }
-  
-    const existingBoughtProduct = boughtProducts.find((item) => item.id === product.id);
-  
-    if (existingBoughtProduct) {
-      setBoughtProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          product.id === existingBoughtProduct.id
-            ? { ...product, quantity: product.quantity + 1 }
-            : product
-        )
-      );
-    } else {
-      setBoughtProducts((prevProducts) => [
-        ...prevProducts,
-        { ...product, quantity: 1 }
-      ]);
-    }
+      const newList = shoppingCardDB.addProducts(boughtProducts, product);
+
+      setBoughtProducts(newList);
+
   };
-  
 
   const removeFromCart = (productId: number) => {
-    setCartItems((prevItems) =>
+    setBoughtProducts((prevItems) =>
       prevItems.filter((item) => item.id !== productId)
     );
   };
 
-
   const clearBoughtProducts = () => {
     setBoughtProducts([]);
+    window.localStorage.removeItem('boughtProducts');
   };
 
   const removeFromBoughtProducts = (productId: number) => {
-    const existingProduct = boughtProducts.find((product) => product.id === productId);
-  
+    const existingProduct = boughtProducts.find(
+      (product) => product.id === productId
+    );
+    const storedLSProducts = getBoughtProducts();
+
     if (existingProduct) {
       if (existingProduct.quantity > 1) {
         setBoughtProducts((prevProducts) =>
@@ -100,24 +124,40 @@ const CartContextProvider: React.FC<CartContextProviderProps> = ({ children }) =
               : product
           )
         );
+
+        const filteredLSProducts =   boughtProducts.map((product) =>
+          product.id === existingProduct.id
+            ? { ...product, quantity: product.quantity - 1 }
+            : product
+        )
+
+        window.localStorage.setItem('boughtProducts', JSON.stringify(filteredLSProducts));
+
       } else {
         setBoughtProducts((prevProducts) =>
           prevProducts.filter((product) => product.id !== productId)
         );
+        const filteredLSProducts = storedLSProducts.filter(
+          (product: Product) => product.id !== productId
+        );
+        setBoughtProducts(filteredLSProducts);
+        window.localStorage.setItem(
+          "boughtProducts",
+          JSON.stringify(filteredLSProducts)
+        );
       }
     }
   };
-  
 
   return (
     <CartContext.Provider
       value={{
-        cartItems,
+        cartItems: [],
         boughtProducts,
         addToCart,
         removeFromCart,
         removeFromBoughtProducts,
-        clearBoughtProducts 
+        clearBoughtProducts,
       }}
     >
       {children}

@@ -24,18 +24,6 @@ const BoughtProducts: React.FC = () => {
     currency: "USD",
   })
 
-  const [storedBoughtProducts, setStoredBoughtProducts] = useState<BoughtProduct[]>([]);
-
-  useEffect(() => {
-    const storedProducts = localStorage.getItem('boughtProducts');
-    if (storedProducts) {
-      setStoredBoughtProducts(JSON.parse(storedProducts));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('boughtProducts', JSON.stringify(boughtProducts));
-  }, [boughtProducts]);
 
   const removeBoughtProduct = (productId: number) => {
     removeFromBoughtProducts(productId);
