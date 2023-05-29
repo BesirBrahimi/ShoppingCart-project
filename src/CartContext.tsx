@@ -28,13 +28,48 @@ const shoppingCardDB = {
       return storedLSProducts;
     }
   },
-  removeProducts: () => {
-    return;
-  },
-  deleteCart: () => {
+  removeProduct: (boughtProducts: BoughtProduct[], productId: number) => {
+    const existingProduct = boughtProducts.find(
+      (product) => product.id === productId
+    );
 
-  }
-}
+    if (existingProduct) {
+      if (existingProduct.quantity > 1) {
+        const updatedProducts = boughtProducts.map((product) =>
+          product.id === existingProduct.id
+            ? { ...product, quantity: product.quantity - 1 }
+            : product
+        );
+
+        window.localStorage.setItem(
+          "boughtProducts",
+          JSON.stringify(updatedProducts)
+        );
+
+        return updatedProducts;
+      } else {
+        const filteredProducts = boughtProducts.filter(
+          (product) => product.id !== productId
+        );
+
+        window.localStorage.setItem(
+          "boughtProducts",
+          JSON.stringify(filteredProducts)
+        );
+
+        return filteredProducts;
+      }
+    }
+
+    return boughtProducts;
+  },
+  clearAllBoughtProducts: (
+    setBoughtProducts: (value: BoughtProduct[]) => void
+  ) => {
+    setBoughtProducts([]);
+    window.localStorage.removeItem("boughtProducts");
+  },
+};
 
 interface Product {
   id: number;
@@ -55,7 +90,6 @@ interface CartContextProps {
   cartItems: CartItem[];
   boughtProducts: BoughtProduct[];
   addToCart: (product: Product) => void;
-  removeFromCart: (productId: number) => void;
   removeFromBoughtProducts: (productId: number) => void;
   clearBoughtProducts: () => void;
 }
@@ -64,7 +98,6 @@ const CartContext = createContext<CartContextProps>({
   cartItems: [],
   boughtProducts: [],
   addToCart: () => {},
-  removeFromCart: () => {},
   removeFromBoughtProducts: () => {},
   clearBoughtProducts: () => {},
 });
@@ -88,65 +121,25 @@ const CartContextProvider: React.FC<CartContextProviderProps> = ({
   const [boughtProducts, setBoughtProducts] = useState<BoughtProduct[]>([]);
 
   useEffect(() => {
-    setBoughtProducts(getBoughtProducts())
-  }, [])
+    setBoughtProducts(getBoughtProducts());
+  }, []);
 
   const addToCart = (product: Product) => {
-      const newList = shoppingCardDB.addProducts(boughtProducts, product);
+    const newList = shoppingCardDB.addProducts(boughtProducts, product);
 
-      setBoughtProducts(newList);
-
-  };
-
-  const removeFromCart = (productId: number) => {
-    setBoughtProducts((prevItems) =>
-      prevItems.filter((item) => item.id !== productId)
-    );
-  };
-
-  const clearBoughtProducts = () => {
-    setBoughtProducts([]);
-    window.localStorage.removeItem('boughtProducts');
+    setBoughtProducts(newList);
   };
 
   const removeFromBoughtProducts = (productId: number) => {
-    const existingProduct = boughtProducts.find(
-      (product) => product.id === productId
+    const removedItems = shoppingCardDB.removeProduct(
+      boughtProducts,
+      productId
     );
-    const storedLSProducts = getBoughtProducts();
+    setBoughtProducts(removedItems);
+  };
 
-    if (existingProduct) {
-      if (existingProduct.quantity > 1) {
-        setBoughtProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product.id === existingProduct.id
-              ? { ...product, quantity: product.quantity - 1 }
-              : product
-          )
-        );
-
-        const filteredLSProducts =   boughtProducts.map((product) =>
-          product.id === existingProduct.id
-            ? { ...product, quantity: product.quantity - 1 }
-            : product
-        )
-
-        window.localStorage.setItem('boughtProducts', JSON.stringify(filteredLSProducts));
-
-      } else {
-        setBoughtProducts((prevProducts) =>
-          prevProducts.filter((product) => product.id !== productId)
-        );
-        const filteredLSProducts = storedLSProducts.filter(
-          (product: Product) => product.id !== productId
-        );
-        setBoughtProducts(filteredLSProducts);
-        window.localStorage.setItem(
-          "boughtProducts",
-          JSON.stringify(filteredLSProducts)
-        );
-      }
-    }
+  const clearBoughtProducts = () => {
+    shoppingCardDB.clearAllBoughtProducts(setBoughtProducts);
   };
 
   return (
@@ -155,7 +148,6 @@ const CartContextProvider: React.FC<CartContextProviderProps> = ({
         cartItems: [],
         boughtProducts,
         addToCart,
-        removeFromCart,
         removeFromBoughtProducts,
         clearBoughtProducts,
       }}
