@@ -1,20 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import products from "../ProductsData";
 import "./ProductDetailsPage.css";
+
+export interface ExternalProduct {
+  id: number;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+}
 
 const ProductDetailsPage: React.FC = () => {
   const { id } = useParams();
+
+  const productId = id ? parseInt(id, 10) : 0;
+  const [product, setProduct] = useState<ExternalProduct | null>(null);
+
+  useEffect(() => {
+    fetch(`https://fakestoreapi.com/products/${productId}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setProduct(data))
+      .catch((error) => console.error("Error fetching product details:", error));
+  }, [productId]);
+  
 
   if (!id) {
     return <div>Product ID not provided.</div>;
   }
 
-  const productId = parseInt(id, 10);
-  const product = products.find((product) => product.id === productId);
-
   if (!product) {
-    return <div>Product not found.</div>;
+    return <div>Loading...</div>;
   }
 
   return (
@@ -23,11 +44,11 @@ const ProductDetailsPage: React.FC = () => {
       <div className="single-product-details">
         <img
           src={product.image}
-          alt={product.name}
+          alt={product.title}
           className="single-product-image"
         />
         <div className="single-product-div-desc">
-          <h3 className="single-product-name">{product.name}</h3>
+          <h3 className="single-product-name">{product.title}</h3>
           <p className="single-product-description">{product.description}</p>
           <p className="single-product-price">${product.price}</p>
           <Link to="/bought" className="back-button">

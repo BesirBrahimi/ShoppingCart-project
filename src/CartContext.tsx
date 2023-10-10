@@ -1,5 +1,15 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 
+
+const getBoughtProducts = () => {
+  const storedProducts = localStorage.getItem("boughtProducts") ?? "";
+  const storedLSProducts =
+    storedProducts && Array.isArray(JSON.parse(storedProducts))
+      ? JSON.parse(storedProducts)
+      : [];
+  return storedLSProducts;
+};
+
 const shoppingCardDB = {
   addProducts: (boughtProducts: BoughtProduct[], product: Product) => {
     const existingItem = boughtProducts.find((item) => item.id === product.id);
@@ -55,7 +65,7 @@ const shoppingCardDB = {
         window.localStorage.setItem(
           "boughtProducts",
           JSON.stringify(filteredProducts)
-        );
+        );  
 
         return filteredProducts;
       }
@@ -71,7 +81,7 @@ const shoppingCardDB = {
 
 interface Product {
   id: number;
-  name: string;
+  title: string;
   price: number;
   image: string;
 }
@@ -104,14 +114,6 @@ interface CartContextProviderProps {
   children: ReactNode;
 }
 
-const getBoughtProducts = () => {
-  const storedProducts = localStorage.getItem("boughtProducts") ?? "";
-  const storedLSProducts =
-    storedProducts && Array.isArray(JSON.parse(storedProducts))
-      ? JSON.parse(storedProducts)
-      : [];
-  return storedLSProducts;
-};
 
 const CartContextProvider: React.FC<CartContextProviderProps> = ({
   children,
