@@ -5,7 +5,7 @@ import "./BoughtProduct.css";
 
 interface Product {
   id: number;
-  name: string;
+  title: string;
   price: number;
   image: string;
 }
@@ -55,14 +55,16 @@ const BoughtProducts: React.FC = () => {
       </div>
       {boughtProducts.length === 0 ? (
         <div className="empty">
-          <img
+        <div className="empty-cart">
+        <img
             src="https://www.99fashionbrands.com/wp-content/uploads/2020/12/empty_cart.png"
-            className="empty-cart"
+            className="photo-empty"
             alt=""
           />
           <Link to="/">
             <button className="go-back-button">Go Back</button>
           </Link>
+        </div>
         </div>
       ) : (
         <>
@@ -71,11 +73,11 @@ const BoughtProducts: React.FC = () => {
               <li key={product.id} className="bought-product-item">
                 <img
                   src={product.image}
-                  alt={product.name}
+                  alt={product.title}
                   className="bought-product-image"
                 />
                 <div className="bought-product-details">
-                  <div className="bought-product-name">{product.name}</div>
+                  <div className="bought-product-name">{product.title.slice(0,20)}</div>
                   <div className="bought-product-quantity">
                     Quantity: {product.quantity}
                   </div>
