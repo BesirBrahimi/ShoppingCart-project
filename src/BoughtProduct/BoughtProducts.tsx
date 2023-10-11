@@ -7,7 +7,7 @@ interface Product {
   id: number;
   title: string;
   price: number;
-  image: string;
+  images: string[];
 }
 
 interface BoughtProduct extends Product {
@@ -71,11 +71,13 @@ const BoughtProducts: React.FC = () => {
           <ul className="bought-products-list">
             {boughtProducts.map((product) => (
               <li key={product.id} className="bought-product-item">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="bought-product-image"
-                />
+             {product.images?.[0] && (
+            <img
+              src={product.images[0]}
+              alt={product.title}
+              className="bought-product-image"
+            />
+          )}
                 <div className="bought-product-details">
                   <div className="bought-product-name">{product.title.slice(0,20)}</div>
                   <div className="bought-product-quantity">

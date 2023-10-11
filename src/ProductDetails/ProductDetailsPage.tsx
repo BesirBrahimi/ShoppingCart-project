@@ -7,7 +7,7 @@ export interface ExternalProduct {
   title: string;
   price: number;
   category: string;
-  image: string;
+  images: string;
   description: string;
 }
 
@@ -18,7 +18,7 @@ const ProductDetailsPage: React.FC = () => {
   const [product, setProduct] = useState<ExternalProduct | null>(null);
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/${productId}`)
+    fetch(`https://dummyjson.com/products/${productId}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -26,16 +26,22 @@ const ProductDetailsPage: React.FC = () => {
         return response.json();
       })
       .then((data) => setProduct(data))
-      .catch((error) => console.error("Error fetching product details:", error));
+      .catch((error) =>
+        console.error("Error fetching product details:", error)
+      );
   }, [productId]);
-  
 
   if (!id) {
     return <div>Product ID not provided.</div>;
   }
 
   if (!product) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-indicator">
+        <div className="spinner"></div>
+        <p className="loading">Loading...</p>
+      </div>
+    );
   }
 
   return (
@@ -43,7 +49,7 @@ const ProductDetailsPage: React.FC = () => {
       <h2>Product Details</h2>
       <div className="single-product-details">
         <img
-          src={product.image}
+          src={product.images[0]}
           alt={product.title}
           className="single-product-image"
         />
