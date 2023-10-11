@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import "./Navbar.css";
 import useCartContext from "../useCartContext";
 
 const Navbar = () => {
   const { boughtProducts } = useCartContext();
+  const [isTopOfPage, setIsTopOfPage] = useState<boolean>(true);
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY === 0) {
+        setIsTopOfPage(true);
+      } else {
+        setIsTopOfPage(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const isNavLinkActive = (path: string) => {
     return location.pathname === path;
@@ -16,7 +29,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
+    <nav className={isTopOfPage ? "navbar" : "navbar nav-fixed"}>
       <div className="navbar-logo">Shopping Cart</div>
       <ul className="navbar-links">
         <li className="direction-nav">

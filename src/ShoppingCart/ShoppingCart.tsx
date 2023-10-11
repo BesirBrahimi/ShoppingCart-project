@@ -9,7 +9,7 @@ export interface ExternalProducts {
   title: string;
   price: number;
   category: string;
-  image: string;
+  images: string;
   description: string;
 }
 
@@ -29,19 +29,23 @@ const ShoppingCart: React.FC = () => {
   const [products, setProducts] = useState<ExternalProducts[]>([]);
   const [loading, setLoading] = useState(false);
 
+  // ...
   useEffect(() => {
     setLoading(true);
-    fetch("https://fakestoreapi.com/products")
+    fetch("https://dummyjson.com/products")
       .then((response) => response.json())
       .then((data) => {
-        setProducts(data);
-        setLoading(false); // Set loading to false after data is fetched
+        setProducts(data.products);
+        console.log(data.products);
+
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error fetching product data:", error);
-        setLoading(false); // Make sure to set loading to false in case of an error too
+        setLoading(false);
       });
   }, []);
+  // ...
 
   const handleAddToCart = (product: ExternalProducts) => {
     addToCart(product);
@@ -59,21 +63,22 @@ const ShoppingCart: React.FC = () => {
     }, 2000);
   };
 
-  if (loading) {
-    return (
-      <div
-        style={{
-          width: "90%",
-          height: "80vh",
-          margin: "30px auto",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <h3 style={{ margin: "10px auto" }}>Loading...</h3>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div
+  //       style={{
+  //         width: "90%",
+  //         height: "80vh",
+  //         margin: "30px auto",
+  //         display: "flex",
+  //         alignItems: "center",
+  //       }}
+  //     >
+  //       <h3 style={{ margin: "10px auto" }}>Loading...</h3>
+  //     </div>
+  //   );
+  // }
+
 
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
@@ -84,7 +89,13 @@ const ShoppingCart: React.FC = () => {
   return (
     <div className="container">
       <h2>Our Products</h2>
-      <div className="category-list">
+      {loading ? (
+        <div className="loading-indicator">
+          <div className="spinner"></div>
+          <p className="loading">Loading...</p>
+        </div>
+      ) : (<>
+        <div className="category-list">
         <button
           className={`category-item ${
             selectedCategory === null ? "active" : ""
@@ -105,34 +116,37 @@ const ShoppingCart: React.FC = () => {
           </button>
         ))}
       </div>
-      <ul className="product-list">
-        {filteredProducts.map((product) => (
-          <li key={product.id} className="product-item">
-            <img
-              src={product.image}
-              alt={product.title}
-              className="product-image"
-            />
-            <div className="product-spec">
-              <div className="product-details">
-                <div className="product-name">{product.title.slice(0, 20)}</div>
-                <div className="product-price">
-                  {DollarUsd.format(product.price)}
+        <ul className="product-list">
+          {filteredProducts.map((product) => (
+            <li key={product.id} className="product-item">
+              <img
+                src={product.images[0]}
+                alt={product.title}
+                className="product-image"
+              />
+
+              <div className="product-spec">
+                <div className="product-details">
+                  <div className="product-name">{product.title}</div>
+                  <div className="product-price">
+                    {DollarUsd.format(product.price)}
+                  </div>
                 </div>
+                {productMessages[product.id] && (
+                  <p className="message">{productMessages[product.id]}</p>
+                )}
+                <button
+                  className="product-button"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Add to Cart
+                </button>
               </div>
-              {productMessages[product.id] && (
-                <p className="message">{productMessages[product.id]}</p>
-              )}
-              <button
-                className="product-button"
-                onClick={() => handleAddToCart(product)}
-              >
-                Add to Cart
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+        </>
+      )}
     </div>
   );
 };
