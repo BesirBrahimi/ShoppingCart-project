@@ -52,8 +52,8 @@
 
   .boughtProducts-length{
    position: absolute;
-   background-color: white;
-   color: red;
+   background-color: red;
+   color: white;
    padding: 2px 5px;
    border-radius: 50%;
    bottom: 10px;

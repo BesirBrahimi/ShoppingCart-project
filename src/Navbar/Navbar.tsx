@@ -24,9 +24,10 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
-  const getProductQuantity = () => {
-    return boughtProducts.reduce((total, product) => total + product.quantity, 0);
-  };
+  // const getProductQuantity = () => {
+  //   return boughtProducts.reduce((total, product) => total + product.quantity, 0);
+  // };
+
 
   return (
     <nav className={isTopOfPage ? "navbar" : "navbar nav-fixed"}>
@@ -50,7 +51,8 @@ const Navbar = () => {
             Bought Products
             {boughtProducts.length > 0 && (
               <span className="boughtProducts-length">
-                {getProductQuantity()}
+                {/* {getProductQuantity()} */}
+                {boughtProducts.length}
               </span>
             )}
           </NavLink>

@@ -4,7 +4,7 @@
   }
   
   .single-product-details {
-    max-width: 900px;
+    width: 90%;
     height: 450px;
     display: flex;
     align-items: center;
@@ -41,6 +41,7 @@
     background-color: #c00;
     padding: 5px 10px;
     color: white;
+    border-radius: 10px;
   }
   .back-button:hover{
     background-color: rgb(255, 0, 0);
@@ -72,6 +73,108 @@
     50% { transform: rotate(180deg); }
     100% { transform: rotate(360deg); }
   }
+
+.product-images-container {
+  width: 40%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center the images horizontally */
+  align-items: center; /* Center the images vertically */
+}
+
+.product-image {
+  width: 200px;
+  height: 120px;
+  margin: 5px;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.5s; /* Adjust the duration here */
+}
+
+.product-image.selected {
+  transform: scale(1.5); 
+  object-fit: contain;
+  width: 100%;
+  height: 80vh;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  z-index: 1;
+}
+
+
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; 
+}
+
+.selected-image-div {
+  width: 60%; 
+  background-color: white; 
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.selected-image-div img {
+  width: 80%;
+  height: 70vh;
+}
+
+.exit-button {
+  position: fixed;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  width: 40px;
+  background-color: red;
+  border-radius: 5px;
+  height: 40px;
+  color: white;
+  margin: 4px auto;
+}
+
+.nav-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background-color: white;
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  border-radius: 5px;
+  color: #333;
+  font-weight: bold;
+  z-index: 2; 
+}
+
+
+.left {
+  left: 20px; 
+}
+
+.right {
+  right: 20px; 
+}
+
+.icon{
+  font-size: 40px;
+  color: rgb(61, 60, 60);
+  font-weight: 600;
+}
+.icon:hover{
+  color: black;
+  font-weight: 700;
+}
 
   @media (max-width: 590px) {
     .single-product-details{
