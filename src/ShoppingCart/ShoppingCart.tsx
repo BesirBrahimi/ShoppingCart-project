@@ -63,23 +63,6 @@ const ShoppingCart: React.FC = () => {
     }, 2000);
   };
 
-  // if (loading) {
-  //   return (
-  //     <div
-  //       style={{
-  //         width: "90%",
-  //         height: "80vh",
-  //         margin: "30px auto",
-  //         display: "flex",
-  //         alignItems: "center",
-  //       }}
-  //     >
-  //       <h3 style={{ margin: "10px auto" }}>Loading...</h3>
-  //     </div>
-  //   );
-  // }
-
-
   const filteredProducts = selectedCategory
     ? products.filter((product) => product.category === selectedCategory)
     : products;
@@ -124,7 +107,6 @@ const ShoppingCart: React.FC = () => {
                 alt={product.title}
                 className="product-image"
               />
-
               <div className="product-spec">
                 <div className="product-details">
                   <div className="product-name">{product.title}</div>
