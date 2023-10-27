@@ -144,6 +144,32 @@ ul {
     font-weight: 700;
   }
   
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.page-item {
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: 600;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.page-item.active {
+  background-color: #007bff;
+  color: #fff; 
+}
+.disabled{
+opacity: 0.4;
+cursor: unset;
+}
+
   @keyframes spin {
     0% { transform: rotate(0deg); }
     50% { transform: rotate(180deg); }
